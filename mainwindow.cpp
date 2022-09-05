@@ -16,8 +16,11 @@ MainWindow::MainWindow(QWidget *parent)
         model = new QSqlTableModel(this, db);
         model->setTable("Work_schedule");
         model->select();
+        model->setHeaderData(1, Qt::Horizontal, "ФИО", Qt::DisplayRole);
 
         ui->tableView->setModel(model);
+        ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+        ui->tableView->setColumnHidden(0, true);
     }
     else
     {
@@ -27,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    db.close();
     delete ui;
 }
 
@@ -47,5 +51,11 @@ void MainWindow::on_btnDelete_clicked()
 void MainWindow::on_tableView_clicked(const QModelIndex &index)
 {
     currentRow = index.row();
+}
+
+
+void MainWindow::on_btnRefresh_clicked()
+{
+    model->select();
 }
 
